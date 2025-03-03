@@ -4,22 +4,35 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
+@Table(name = "order") // Gunakan plural untuk menghindari konflik dengan SQL keyword
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrder;
 
-    @ManyToOne
-    @JoinColumn(name = "item_id", nullable = false)
-    private Item idItem;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idItem", nullable = false)
+    private Item item;
 
-    private int quantity;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idInventory", nullable = false)
+    private Inventory inventory;
+
+    @Column(nullable = false)
+    private int qty;
+
+    @Column(nullable = false)
     private int price;
-}
 
+    // Menghitung total harga secara otomatis
+    public void calculatePrice() {
+        if (item != null) {
+            this.price = item.getItemPrice() * this.qty;
+        }
+    }
+}

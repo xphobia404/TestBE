@@ -17,9 +17,13 @@ public class ItemController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping(value = "/list")
-    public List<Item> list() {
-        return itemService.getAllItems();
+    @GetMapping("/list")
+    public List<?> list(@RequestParam(value = "showStock", required = false, defaultValue = "yes") String showStock) {
+        if ("yes".equalsIgnoreCase(showStock)) {
+            return itemService.getAllItems();
+        } else {
+            return itemService.getItemsWithoutStock();
+        }
     }
 
     @GetMapping(value = "/list/page")

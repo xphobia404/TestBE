@@ -1,6 +1,7 @@
 package org.TestOBS.TestBE.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.TestOBS.TestBE.model.Inventory;
@@ -18,7 +19,7 @@ public class InventoryController {
     private InventoryService inventoryService;
 
     @GetMapping(value = "/list")
-    public List<Inventory> list() {
+    public List<Map<String, Object>> list() {
         return inventoryService.getAllInventories();
     }
 
@@ -29,18 +30,20 @@ public class InventoryController {
         return inventoryService.getInventoryWithPagination(page, size);
     }
 
-    @PostMapping(value = "/save")
-    public ResponseEntity<Inventory> saveInventory(@RequestBody Inventory item) {
-        Inventory savedItem = inventoryService.saveInventory(item);
-        return ResponseEntity.ok(savedItem);
+    @PostMapping("/save")
+    public ResponseEntity<Map<String, Object>> saveInventory(@RequestBody Inventory inventory) {
+        Map<String, Object> response = inventoryService.saveInventory(inventory);
+        return ResponseEntity.ok(response);
     }
 
-    // @PutMapping(value = "/update/{id}")
-    // public ResponseEntity<Inventory> updateInventory(@PathVariable Long id, @RequestBody Inventory newInventory) {
-    //     Optional<Inventory> updateInventory = inventoryService.editInventory(id, newInventory);
-    //     return updateInventory.map(ResponseEntity::ok)
-    //             .orElseGet(() -> ResponseEntity.notFound().build());
-    // }
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<Inventory> updateInventory(@PathVariable Long id, @RequestBody Inventory newInventory) {
+        Optional<Inventory> updatedInventory = inventoryService.editInventory(id, newInventory);
+        return updatedInventory
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<Void> deleteInventory(@PathVariable Long id) {

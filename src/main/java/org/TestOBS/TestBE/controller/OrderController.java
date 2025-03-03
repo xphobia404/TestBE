@@ -1,10 +1,10 @@
 package org.TestOBS.TestBE.controller;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
-import org.TestOBS.TestBE.model.Item;
-import org.TestOBS.TestBE.service.ItemService;
+import org.TestOBS.TestBE.model.Order;
+import org.TestOBS.TestBE.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -15,37 +15,36 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     @Autowired
-    private ItemService itemService;
+    private OrderService orderService;
 
     @GetMapping(value = "/list")
-    public List<Item> list() {
-        return itemService.getAllItems();
+    public List<Map<String, Object>> list() {
+        return orderService.getAllOrders();
     }
 
     @GetMapping(value = "/list/page")
-    public Page<Item> listPage(
+    public Page<Order> listPage(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return itemService.getItemsWithPagination(page, size);
+        return orderService.getOrderWithPagination(page, size);
     }
 
-    @PostMapping(value = "/save")
-    public ResponseEntity<Item> saveItem(@RequestBody Item item) {
-        Item savedItem = itemService.saveItem(item);
-        return ResponseEntity.ok(savedItem);
+    @PostMapping("/save")
+    public ResponseEntity<Map<String, Object>> saveOrder(@RequestBody Order order) {
+        Map<String, Object> response = orderService.saveOrder(order);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping(value = "/update/{id}")
-    public ResponseEntity<Item> updateItem(@PathVariable Long id, @RequestBody Item newItem) {
-        Optional<Item> updatedItem = itemService.editItem(id, newItem);
-        return updatedItem.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Map<String, Object>> updateOrder(@PathVariable Long id, @RequestBody Order newOrder) {
+        Map<String, Object> response = orderService.updateOrder(id, newOrder);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         try {
-            itemService.deleteItem(id);
+            orderService.deleteOrder(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
