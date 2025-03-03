@@ -68,7 +68,7 @@ public class OrderService {
         result.put("idOrder", savedOrder.getIdOrder());
         result.put("idItem", item.getIdItem());
         result.put("nameItem", item.getItemName());
-        result.put("quantity", order.getInventory().getQuantity());
+        result.put("quantity", order.getQty());
         result.put("price", item.getItemPrice());
 
         return result;

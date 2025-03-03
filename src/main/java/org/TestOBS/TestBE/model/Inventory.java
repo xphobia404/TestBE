@@ -1,7 +1,5 @@
 package org.TestOBS.TestBE.model;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,7 +21,4 @@ public class Inventory {
 
     private int quantity;
     private String type; // "T" for Top Up, "W" for Withdrawal
-
-    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> order;
 }

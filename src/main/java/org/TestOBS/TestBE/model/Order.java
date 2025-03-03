@@ -8,14 +8,14 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order") // Gunakan plural untuk menghindari konflik dengan SQL keyword
+@Table(name = "orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrder;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idItem", nullable = false)
     private Item item;
 
@@ -23,16 +23,5 @@ public class Order {
     @JoinColumn(name = "idInventory", nullable = false)
     private Inventory inventory;
 
-    @Column(nullable = false)
     private int qty;
-
-    @Column(nullable = false)
-    private int price;
-
-    // Menghitung total harga secara otomatis
-    public void calculatePrice() {
-        if (item != null) {
-            this.price = item.getItemPrice() * this.qty;
-        }
-    }
 }

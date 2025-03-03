@@ -3,8 +3,6 @@ package org.TestOBS.TestBE.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Entity
 @Setter
 @Getter
@@ -20,7 +18,4 @@ public class Item {
     private String itemName;
     private int itemPrice;
     private int itemStock;
-
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> order;
 }
